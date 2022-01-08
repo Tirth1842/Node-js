@@ -1,0 +1,35 @@
+<html lang="en">
+    <%- include("../partials/head.ejs") %>
+    
+    <body>
+        <%- include("../partials/nav.ejs") %>
+        
+        <div class="details content">
+            <h2><%= blog.title %></h2>
+            <div class="content">
+                <p><%= blog.body %> </p>
+            </div>
+            <a class="delete" data-doc="<%= blog._id %> ">delete</a>
+        </div>
+
+        <%- include("../partials/footer.ejs") %>
+        
+        <script>
+            const trashcan = document.querySelector('a.delete');
+
+            trashcan.addEventListener('click', (e) => {
+                const endpoint = `/blogs/${trashcan.dataset.doc}`;
+
+                // we need to use this because we want the delete request to be send once the delete button has been clicked 
+                // so for that we need to use the frontend javascript 
+                // and for that fetch is to used.
+                fetch(endpoint, {
+                    method: 'DELETE'
+                })
+                .then((response) => response.json()) // convertion of json data to actual javascript object
+                .then((data) => window.location.href= data.redirect)
+                .catch(err => console.log(err));
+            })
+        </script>
+    </body>
+</html>
